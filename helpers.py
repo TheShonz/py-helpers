@@ -7,7 +7,6 @@
 # -------
 
 import os
-import platform
 import sys
 from zipfile import ZipFile
 import gzip
@@ -26,25 +25,6 @@ from cryptography.fernet import Fernet
 
 # Functions
 # ---------
-
-# Determine file creation (or last modification if Linux) depending on system
-def File_Creation_Date(path):
-    """
-    Try to get the date that a file was created, falling back to when it was
-    last modified if that isn't possible.
-    See http://stackoverflow.com/a/39501288/1709587 for explanation.
-    """
-    if platform.system() == 'Windows':
-        return os.path.getctime(path)
-    else:
-        stat = os.stat(path)
-        try:
-            return stat.st_birthtime
-        except AttributeError:
-            # We're probably on Linux. No easy way to get creation dates here,
-            # so we'll settle for when its content was last modified.
-            return stat.st_mtime
-
 
 # Read excel to dataframe and convert to dict to access individual row as dict
 # Using defaultdict(list) and 'records' orientation 
@@ -115,7 +95,7 @@ def Find_Most_Recent(loc: str, # 'loc' refers to the dir to look in
 
 	# Return the most recently created file
 	if list_of_files != []:
-		path	= max(list_of_files, key=File_Creation_Date)
+		path	= max(list_of_files, key=os.path.getctime)
 		return path
 
 	else:
@@ -126,7 +106,7 @@ def Find_Most_Recent(loc: str, # 'loc' refers to the dir to look in
 def File_Age(file_path):
 	today = datetime.today()
 
-	creation_stamp = datetime.strptime(time.ctime(File_Creation_Date(file_path)), "%c")
+	creation_stamp = datetime.strptime(time.ctime(os.path.getctime(file_path)), "%c")
 	today_stamp    = datetime.combine(today, datetime.min.time())
 	day_delta 	   = today_stamp - creation_stamp
 
@@ -289,9 +269,9 @@ def MultiplyIterable(iterable, # 'iterable' = any object that can be iterated (l
 	# optional sort() and reverse() functions
 	if sort:
 		try:
-			iterable.sort()
+			iterable = sorted(iterable)
 		except TypeError as e:
-			print('Iterable could not be sorted:\n',iterable,'\n',e)
+			print(type(iterable) + ' cannot be sorted:\n', e)
 	if reverse:
 		iterable.reverse()
 
