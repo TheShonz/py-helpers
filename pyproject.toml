@@ -1,5 +1,5 @@
 [project]
-name = "py_helpers_TheShonz"
+name = "py-helpers"
 version = "1.0.0"
 authors = [
   { name="Shawn Savoie", email="shawn.m.savoie@gmail.com" },
