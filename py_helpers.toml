@@ -1,0 +1,14 @@
+[project]
+name = "py_helpers_TheShonz"
+version = "1.0.0"
+authors = [
+  { name="Shawn Savoie", email="shawn.m.savoie@gmail.com" },
+]
+description = "Helpful functions with various applications"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ['pandas', 'pytz', 'cryptography']
+
+[project.urls]
+"Homepage" = "https://github.com/TheShonz/py_helpers"
+"Bug Tracker" = "https://github.com/TheShonz/py_helpers/issues"
