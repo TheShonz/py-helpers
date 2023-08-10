@@ -266,12 +266,9 @@ def MultiplyIterable(iterable, # 'iterable' = any object that can be iterated (l
 	if stop == None:
 		stop = len(iterable)
 
-	# optional sort() and reverse() functions
+	# optional sorted() and reverse() functions
 	if sort:
-		try:
-			iterable = sorted(iterable)
-		except TypeError as e:
-			print(type(iterable) + ' cannot be sorted:\n', e)
+		iterable = sorted(iterable)
 	if reverse:
 		iterable.reverse()
 
