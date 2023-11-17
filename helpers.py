@@ -15,7 +15,7 @@ import re
 import pandas as pd
 from collections import defaultdict
 import pytz
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import time
 import secrets
 import string
@@ -514,3 +514,22 @@ def Increase_File_Number(path):
 
 	return path
 
+
+# Find the next date of a given weekday
+def Date_by_Weekday(day: str or int, weeks_out: int = 0):
+	# convert string day to weeknumber
+	if isinstance(day, str):
+		week_dict = {'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6}
+		day = week_dict[day.strip().lower()]
+
+	# calculate days until the desired day
+	days_until = timedelta(days = day - (date.today().weekday()))
+
+	# determine the days until by subtracting today's weeknumber from the desired date's
+	if days_until.days < 0:
+		days_until += timedelta(days = 7)
+	
+	# apply weeks out modifier
+	days_until += timedelta(weeks = weeks_out)
+
+	return date.today() + days_until
