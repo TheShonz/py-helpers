@@ -518,7 +518,7 @@ def Increase_File_Number(path):
 
 
 # Find the next date of a given weekday
-def Date_by_Weekday(day: str or int, weeks_out: int = 0):
+def Date_by_Weekday(day: str or int, weeks_out: int = 0, date_format = 'datetime'):
 	# convert string day to weeknumber
 	if isinstance(day, str):
 		week_dict = {
@@ -531,8 +531,9 @@ def Date_by_Weekday(day: str or int, weeks_out: int = 0):
 			'sunday': 6}
 		day = week_dict[day.strip().lower()]
 
+	today = datetime.today()
 	# calculate days until the desired day
-	days_until = timedelta(days = day - (date.today().weekday()))
+	days_until = timedelta(days = day - (today.weekday()))
 
 	# determine the days until by subtracting today's weeknumber from the desired date's
 	if days_until.days < 0:
@@ -541,7 +542,11 @@ def Date_by_Weekday(day: str or int, weeks_out: int = 0):
 	# apply weeks out modifier
 	days_until += timedelta(weeks = weeks_out)
 
-	return date.today() + days_until
+	# Optionally changed datetime.datetime to datetime.date
+	if date_format == 'date':
+		today = today.date()
+
+	return today + days_until
 
 
 # Determine if an object has a specified method and if that method is callable
