@@ -184,7 +184,7 @@ def is_dst(timezone = "UTC"):
 	return now.astimezone(tz).dst() != timedelta(0) # In most cases time delta will be an hour different if in DST
 
 
-
+# Generate a string of randomized characters
 def Gen_Random_Str(char_len:int, # 'char_len' = int; length of the string to be generated
 					sep:str = '', # 'sep' = static character to separate each of the randomized characters
 					special:str = '', # 'special' = user-chosen characters to include among possible randomized characters 
@@ -205,7 +205,7 @@ def Gen_Random_Str(char_len:int, # 'char_len' = int; length of the string to be 
 		for i in range(char_len)))
 
 
-
+# Generate a list of randomized strings
 def Gen_Random_List(list_len: int, # 'list_len' = int; number of random strings to generate as list
 					str_len: int = 20, # 'str_len' = int; length of each string to be generated
 					str_params:dict = None): # 'str_params' = dict; access Gen_Random_Str() args
@@ -447,6 +447,7 @@ def Encrypt_File(obj:(bytes or str),
 
 	return file_path, key_path
 
+
 # Open and decrypt a bytes object or a file encrypted with the Encrypt_File() method
 def Decrypt(obj:bytes, 
 			key:'Fernet(Fernet.generate_key())'):
@@ -492,6 +493,7 @@ def Gen_Key(path):
 
 	return fernet
 
+
 # Alter file names to avoid overwriting
 def Increase_File_Number(path):
 	# determine if file is numbered
@@ -519,7 +521,14 @@ def Increase_File_Number(path):
 def Date_by_Weekday(day: str or int, weeks_out: int = 0):
 	# convert string day to weeknumber
 	if isinstance(day, str):
-		week_dict = {'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6}
+		week_dict = {
+			'monday': 0, 
+			'tuesday': 1, 
+			'wednesday': 2, 
+			'thursday': 3, 
+			'friday': 4, 
+			'saturday': 5, 
+			'sunday': 6}
 		day = week_dict[day.strip().lower()]
 
 	# calculate days until the desired day
@@ -533,3 +542,9 @@ def Date_by_Weekday(day: str or int, weeks_out: int = 0):
 	days_until += timedelta(weeks = weeks_out)
 
 	return date.today() + days_until
+
+
+# Determine if an object has a specified method and if that method is callable
+def has_method(obj, method: str):
+	mthd = getattr(obj, method, False)
+	return mthd, callable(mthd)
