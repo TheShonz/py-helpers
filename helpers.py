@@ -553,3 +553,39 @@ def Date_by_Weekday(day: str or int, weeks_out: int = 0, date_format = 'datetime
 def has_method(obj, method: str):
 	mthd = getattr(obj, method, False)
 	return mthd, callable(mthd)
+
+
+# 
+def alpha_num_sort(i, sort = None, index = 0):
+	"""
+	For sorting iterables with mixed data types
+	Dictionaries must take form: dict(sorted(dct.items(), key=alpha_num_sort))
+
+	"""
+	priority = {'alpha': 0, 'alnum': 1, 'numeric': 2, 'decimal': 3, 'other': 0}
+
+	if sort:
+		assert isinstance(sort, dict)
+		priority.update(sort)
+
+	if any(x in (priority['numeric'], priority['decimal']) for x in (priority['alpha'], priority['alnum'], priority['other'])):
+		priority = {'alpha': 0, 'alnum': 1, 'numeric': 2, 'decimal': 3, 'other': 0}
+
+	if isinstance(i, (list, tuple, set)):
+		key = i[index]
+	else:
+		key = i
+
+	if isinstance(key, str):
+		if key.isalpha()::
+			return (priority['alpha'], key)
+		elif key.isnumeric():
+			return (priority['numeric'], int(key))
+		elif key.isalnum():
+			return (priority['alnum'], key)
+		else:
+			return (priority['other'], key)
+	else:
+		return (priority['decimal'], key)
+
+
