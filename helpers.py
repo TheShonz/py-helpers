@@ -590,3 +590,20 @@ def alpha_num_sort(i, sort = None, index = 0):
 			return (priority['other'], key)
 	else:
 		return (priority['decimal'], key)
+
+
+# Convert an array-type list of 'row' lists to 'column' lists
+def row_to_col_lists(row_list):
+	col_list = []
+
+	# determine number of columns present and create that number of empty lists within col_list
+	list_count = max(list(map(lambda item: len(item), row_list)))
+	[col_list.append([]) for n in range(list_count)]
+
+	# add each row item to the corresponding column list
+	for item in row_list:
+		[col_list[item.indext(value)].append(value) for value in item]
+		if len(item) < list_count:
+			[col_list[n].append('') for n in range(len(item), list_count)]
+
+	return col_list
