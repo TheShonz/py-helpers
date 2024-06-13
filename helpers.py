@@ -555,27 +555,30 @@ def has_method(obj, method: str):
 	return mthd, callable(mthd)
 
 
-# 
+# For sorting iterables with mixed data types
 def alpha_num_sort(i, sort = None, index = 0):
 	"""
-	For sorting iterables with mixed data types
-	Dictionaries must take form: dict(sorted(dct.items(), key=alpha_num_sort))
-
+	For dictionaries sort dct.items() and convert back to dict, ie. : dict(sorted(dct.items(), key=alpha_num_sort))
 	"""
+	# set default sorting priorities
 	priority = {'alpha': 0, 'alnum': 1, 'numeric': 2, 'decimal': 3, 'other': 0}
 
+	# apply user input sorts to sorting priorities
 	if sort:
 		assert isinstance(sort, dict)
 		priority.update(sort)
 
+	# when any alphanum or unclassified strings share priorty with decimal or numeric sorts, return to default sorting priority
 	if any(x in (priority['numeric'], priority['decimal']) for x in (priority['alpha'], priority['alnum'], priority['other'])):
 		priority = {'alpha': 0, 'alnum': 1, 'numeric': 2, 'decimal': 3, 'other': 0}
 
+	# establish key based on object type of i
 	if isinstance(i, (list, tuple, set)):
 		key = i[index]
 	else:
 		key = i
 
+	# return tuples designating priority of sort so that like types are sorted with like
 	if isinstance(key, str):
 		if key.isalpha()::
 			return (priority['alpha'], key)
@@ -587,5 +590,3 @@ def alpha_num_sort(i, sort = None, index = 0):
 			return (priority['other'], key)
 	else:
 		return (priority['decimal'], key)
-
-
