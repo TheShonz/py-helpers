@@ -29,7 +29,7 @@ from cryptography.fernet import Fernet
 # Read excel to dataframe and convert to dict to access individual row as dict
 # Using defaultdict(list) and 'records' orientation 
 # 	to read dict as rows--similar to csv.DictReader
-def Excel_to_Dict(path: str, 
+def excel_to_dict(path: str, 
 					sheet = 0):
 	with open(path, mode = 'rb') as source:
 		df = pd.read_excel(source, engine = 'openpyxl', sheet_name = sheet).fillna('')
@@ -41,7 +41,7 @@ def Excel_to_Dict(path: str,
 
 
 # Convert an Excel file to .csv
-def Excel_to_CSV(source: str):
+def excel_to_csv(source: str):
 	with open(source, 'rb') as read:
 		read_file = pd.read_excel(read, engine = 'openpyxl')
 	
@@ -60,7 +60,7 @@ def Excel_to_CSV(source: str):
 
 # Look for files in a location beginning with a specific string
 # returns a list
-def Look_for_Files(loc: str, 
+def look_for_files(loc: str, 
 					keyword: str = ''):
 	list_of_files = []
 	for root, dirs, files in os.walk(loc, topdown=False):
@@ -73,7 +73,7 @@ def Look_for_Files(loc: str,
 
 # Look for dirs in a location beginning with a specific string
 # returns a list
-def Look_for_Dirs(loc: str, 
+def look_for_dirs(loc: str, 
 					keyword: str = ''):
 	list_of_dirs = []
 	for root, dirs, files in os.walk(loc, topdown=False):
@@ -86,7 +86,7 @@ def Look_for_Dirs(loc: str,
 
 # Looks for the most recent file in a location beginning wiht a specific string
 # returns a path
-def Find_Most_Recent(loc: str, # 'loc' refers to the dir to look in
+def find_most_recent(loc: str, # 'loc' refers to the dir to look in
 						keyword: str = '', # 'keyword' is a string to search for in file name
 						silent: bool = False): # 'silent', bool: to determine whether or not to raise LookupError
 
@@ -106,7 +106,7 @@ def Find_Most_Recent(loc: str, # 'loc' refers to the dir to look in
 
 
 # Gets the timedelta from the creation of a file to current date
-def File_Age(file_path):
+def file_age(file_path):
 	today = datetime.today()
 
 	creation_stamp = datetime.strptime(time.ctime(os.path.getctime(file_path)), "%c")
@@ -117,7 +117,7 @@ def File_Age(file_path):
 
 
 # Gets the timedelta from the last mod time of a file to current date
-def File_Mod_Age(file_path):
+def file_mod_age(file_path):
 	today = datetime.today()
 
 	mod_stamp   = datetime.strptime(time.ctime(os.path.getmtime(file_path)), "%c")
@@ -128,7 +128,7 @@ def File_Mod_Age(file_path):
 
 
 # Unzip and relocate the contents of .zip files
-def ZipUnZip(source): # 'source' = .zip file path
+def zip_unzip(source): # 'source' = .zip file path
 	source = r'{}'.format(source.strip('"'))
 	file   = os.path.basename(source)
 	ext    = os.path.splitext(source)[-1].lower()
@@ -158,7 +158,7 @@ def ZipUnZip(source): # 'source' = .zip file path
 
 
 # Unzip and relocate the contents of .gz files
-def GZUnZip(source): # 'source' = .gz file path
+def gz_unzip(source): # 'source' = .gz file path
 
 	# establish a new path for when the file is unzipped
 	new_file = source.rstrip(os.path.splitext(source)[-1].lower())
@@ -176,7 +176,7 @@ def GZUnZip(source): # 'source' = .gz file path
 
 
 # Check for any values equal to 'NaN' or ''
-def isEmpty(value): 
+def is_empty(value): 
 	# Check for empty string
 	if value == '':
 		return value == ''
@@ -199,7 +199,7 @@ def is_dst(timezone = "UTC"):
 
 
 # Generate a string of randomized characters
-def Gen_Random_Str(char_len:int, # 'char_len' = int; length of the string to be generated
+def gen_random_str(char_len:int, # 'char_len' = int; length of the string to be generated
 					sep:str = '', # 'sep' = static character to separate each of the randomized characters
 					special:str = '', # 'special' = user-chosen characters to include among possible randomized characters 
 					alpha:bool = True, # 'alpha' = bool; to determine whether to include string.ascii_letters among possible randomized characters
@@ -220,7 +220,7 @@ def Gen_Random_Str(char_len:int, # 'char_len' = int; length of the string to be 
 
 
 # Generate a list of randomized strings
-def Gen_Random_List(list_len: int, # 'list_len' = int; number of random strings to generate as list
+def gen_random_list(list_len: int, # 'list_len' = int; number of random strings to generate as list
 					str_len: int = 20, # 'str_len' = int; length of each string to be generated
 					str_params:dict = None): # 'str_params' = dict; access Gen_Random_Str() args
 
@@ -261,7 +261,7 @@ def Gen_Random_List(list_len: int, # 'list_len' = int; number of random strings 
 
 
 # Multiply items within an iterable object
-def MultiplyIterable(iterable, # 'iterable' = any object that can be iterated (list, set, str, dict, tuple)
+def multiply_iterable(iterable, # 'iterable' = any object that can be iterated (list, set, str, dict, tuple)
 				stop:int = None, # 'stop' = int; the number of iterable objects that should be multiplied
 				sort:bool = False, # 'sort' = bool; when True, sort list from smallest to greatest value
 				reverse:bool = False): # 'reverse' = bool; when True, reverse list order
@@ -304,7 +304,7 @@ def MultiplyIterable(iterable, # 'iterable' = any object that can be iterated (l
 
 
 # Find all integers that can be multipled to equal a given number
-def Find_Denominators(num):
+def find_denominators(num):
 	denom_list = []
 	for n in range(1, num):
 		if (num % n) == 0:
@@ -315,7 +315,7 @@ def Find_Denominators(num):
 
 
 # Function to remove duplicates from a list
-def Remove_Duplicates_List(lst):
+def remove_duplicates_list(lst):
 	for x in lst:
 		for index in range(len(lst)-1):
 			if x == lst[index]:
@@ -326,7 +326,7 @@ def Remove_Duplicates_List(lst):
 
 
 # Split a given number into unique pairs of denominators
-def Denominator_Pairs(num):
+def denominator_pairs(num):
 	
 	denoms = Find_Denominators(num)
 
@@ -344,7 +344,7 @@ def Denominator_Pairs(num):
 
 
 # Bool check to determine if a number is prime
-def Check_Prime(num):
+def check_prime(num):
 	for i in range(2, num):
 		if (num % i) == 0:
 			# if factor is found, return False
@@ -354,7 +354,7 @@ def Check_Prime(num):
 
 
 # Flatten iterables into a single-level list regardless of levels of iterables
-def Flat_List(*args, 
+def flat_list(*args, 
 			dict_value = None): # 'dict_value' = user-designated value that determines how to handle dict
 	out_list = []
 	for arg in args:
@@ -384,7 +384,7 @@ def Flat_List(*args,
 
 
 # Encrypt a file or string and save to file
-def Encrypt_File(obj:(bytes or str), 
+def encrypt_file(obj:(bytes or str), 
 				key:'Fernet(Fernet.generate_key())' or str = None, 
 				file_path: str = 'FILE.txt', 
 				key_path: str = 'KEY.key',
@@ -462,8 +462,8 @@ def Encrypt_File(obj:(bytes or str),
 	return file_path, key_path
 
 
-# Open and decrypt a bytes object or a file encrypted with the Encrypt_File() method
-def Decrypt(obj:bytes, 
+# Open and decrypt a bytes object or a file encrypted with the encrypt_file() method
+def decrypt(obj:bytes, 
 			key:'Fernet(Fernet.generate_key())'):
 	
 	if os.path.exists(obj) and os.path.isfile(obj):
@@ -494,7 +494,7 @@ def Decrypt(obj:bytes,
 
 
 # Generate the key using cryptography's Fernet
-def Gen_Key(path):
+def gen_key(path):
 	# generate the key
 	key = Fernet.generate_key()
 
@@ -509,7 +509,7 @@ def Gen_Key(path):
 
 
 # Alter file names to avoid overwriting
-def Increase_File_Number(path):
+def increase_file_number(path):
 	# determine if file is numbered
 	ext       = os.path.splitext(path)[-1].lower()
 	found_num = re.findall('\(\d*\)' + ext, path)
@@ -532,7 +532,7 @@ def Increase_File_Number(path):
 
 
 # Find the next date of a given weekday
-def Date_by_Weekday(day: str or int, weeks_out: int = 0, date_format = 'datetime'):
+def date_by_weekday(day: str or int, weeks_out: int = 0, date_format = 'datetime'):
 	# convert string day to weeknumber
 	if isinstance(day, str):
 		week_dict = {
@@ -623,7 +623,7 @@ def row_to_col_lists(row_list):
 	return col_list
 
 
-# 
+# Format a nested dict as a json-like, viewable string using Python syntax
 # Credit: User "Knio" (https://stackoverflow.com/questions/3733554/how-to-format-dict-string-outputs-nicely) for initial function which only deals with dictionaries. I expanded to included lists, tuples & sets.
 def pretty_nested_dict_format(inpt, tab=0, tab_space=4) -> str:
 	
