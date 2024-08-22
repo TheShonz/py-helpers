@@ -87,8 +87,8 @@ def Look_for_Dirs(loc: str,
 # Looks for the most recent file in a location beginning wiht a specific string
 # returns a path
 def Find_Most_Recent(loc: str, # 'loc' refers to the dir to look in
-						keyword: str = ''): # 'name' is a string to search for at the beginning of the file name
-	list_of_files = []
+						keyword: str = '', # 'keyword' is a string to search for in file name
+						silent: bool = False): # 'silent', bool: to determine whether or not to raise LookupError
 
 	# Collect a list of files matching the designated names
 	list_of_files = Look_for_Files(loc, keyword = keyword)
@@ -97,9 +97,12 @@ def Find_Most_Recent(loc: str, # 'loc' refers to the dir to look in
 	if list_of_files != []:
 		path	= max(list_of_files, key=os.path.getctime)
 		return path
+	
+	elif not(silent):
+		raise LookupError('Cannot locate file(s) containing keyword: \"' + keyword + '\" in ' + loc)
 
 	else:
-		raise LookupError('Cannot locate file(s) containing keyword: \"' + keyword + '\" in ' + loc)
+		return ''
 
 
 # Gets the timedelta from the creation of a file to current date
@@ -109,6 +112,17 @@ def File_Age(file_path):
 	creation_stamp = datetime.strptime(time.ctime(os.path.getctime(file_path)), "%c")
 	today_stamp    = datetime.combine(today, datetime.min.time())
 	day_delta 	   = today_stamp - creation_stamp
+
+	return day_delta
+
+
+# Gets the timedelta from the last mod time of a file to current date
+def File_Mod_Age(file_path):
+	today = datetime.today()
+
+	mod_stamp   = datetime.strptime(time.ctime(os.path.getmtime(file_path)), "%c")
+	today_stamp = datetime.combine(today, datetime.min.time())
+	day_delta   = today_stamp - mod_stamp
 
 	return day_delta
 
@@ -607,3 +621,49 @@ def row_to_col_lists(row_list):
 			[col_list[n].append('') for n in range(len(item), list_count)]
 
 	return col_list
+
+
+# 
+# Credit: User "Knio" (https://stackoverflow.com/questions/3733554/how-to-format-dict-string-outputs-nicely) for initial function which only deals with dictionaries. I expanded to included lists, tuples & sets.
+def pretty_nested_dict_format(inpt, tab=0, tab_space=4) -> str:
+	
+	def check_type(i, t):
+		if isinstance(i, (dict,list,tuple,set)):
+			i = pretty_nested_dict_format(i, t+1)
+		else:
+			i = repr(i)
+		return i
+
+	s = []
+	if isinstance(inpt, dict):
+		s.append('{\n')
+		for k,v in inpt.items():
+			v = check_type(v, tab)
+			s.append('%s%s: %s,\n' % (' '*tab_space*tab, repr(k), v))
+		s.append('%s}' % (' '*tab_space*tab))
+
+	elif isinstance(inpt, (list,tuple,set)):
+		if isinstance(inpt, list):
+			s.append('[\n')
+		if isinstance(inpt, tuple):
+			s.append('(\n')
+		if isinstance(inpt, set):
+			s.append('{\n')
+
+		i_list = []
+		for i in inpt:
+			i = check_type(i, tab)
+			i_list.append('%s%s' % (' '*tab_space*tab, i))
+
+		v = ",\n".join(i_list)
+		
+		s.append('%s\n' % (v))
+
+		if isinstance(inpt, list):
+			s.append('%s]' % (' '*tab_space*tab))
+		elif isinstance(inpt, tuple):
+			s.append('%s)' % (' '*tab_space*tab))
+		elif isinstance(inpt, set):
+			s.append('%s}' % (' '*tab_space*tab))
+	
+	return ''.join(s)
